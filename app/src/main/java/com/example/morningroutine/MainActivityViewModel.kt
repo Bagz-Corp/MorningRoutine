@@ -1,11 +1,22 @@
 package com.example.morningroutine
 
+import android.content.Context
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.StateFlow
 
-class MainActivityViewModel: ViewModel() {
+class MainActivityViewModel(
 
-    val uiState: StateFlow<MainActivityUiState> = TODO()
+): ViewModel() {
+
+    companion object {
+        private const val USER_PREFERENCES_NAME = "user_preferences"
+    }
+
+    private val Context.dataStore by preferencesDataStore(
+        name = USER_PREFERENCES_NAME
+    )
+
 }
 
 sealed interface MainActivityUiState {

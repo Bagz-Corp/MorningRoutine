@@ -12,7 +12,11 @@ interface StockRepository {
 class StockRepositoryImpl : StockRepository {
 
     override fun getTimeSeriesDailyInfo(): Flow<StockInfo> = flow {
-        val stockInfo = StockInfo()
+        val stockInfo = StockInfo(
+            name = "",
+            currentValue = 0,
+            historicValues = listOf()
+        )
         emit(stockInfo)
     }
 

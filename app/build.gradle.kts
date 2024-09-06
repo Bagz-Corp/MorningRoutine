@@ -66,8 +66,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.material.icons.extended)
 
-    // Retrofit
-    implementation(libs.retrofit)
-    // Retrofit with Scalar Converter
-    implementation(libs.converter.scalars)
+    implementation(libs.retrofit) // Retrofit
+    implementation(libs.converter.scalars) // Retrofit with Scalar Converter
+    implementation(libs.androidx.datastore.preferences) // DataStore
 }

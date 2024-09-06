@@ -4,8 +4,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.example.morningroutine.core.data.repository.UserPreferencesRepository
 import com.example.morningroutine.ui.home.HomeScreenRoute
 import com.example.morningroutine.ui.routine.FinanceRoute
+import com.example.morningroutine.ui.routine.FinanceViewModel
 
 const val HOME_SCREEN_ROUTE = "HomeScreenRoute"
 const val ROUTINE_SCREEN_ROUTE = "RoutineScreenRoute"
@@ -22,10 +24,16 @@ fun NavGraphBuilder.homeScreen(onRoutineClick: (String) -> Unit) {
     }
 }
 
-fun NavGraphBuilder.routineScreen() {
+fun NavGraphBuilder.routineScreen(
+    userPreferencesRepository: UserPreferencesRepository
+) {
     composable(
         route = ROUTINE_SCREEN_ROUTE
     ) {
-        FinanceRoute()
+        FinanceRoute(
+             viewModel = FinanceViewModel(
+                 userPreferencesRepository = userPreferencesRepository
+             )
+        )
     }
 }
