@@ -7,3 +7,4 @@ This app has no intention of becoming an commercial app.
 
 Navigation : Nav controller 
 UserPreferences : DataStore is used to stored user preferences. ATM, only the stock symbols are stored in DataStore
+Market Stock API : https://marketstack.com/documentation

@@ -11,12 +11,12 @@ import com.example.morningroutine.core.data.repository.UserPreferencesRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
+import javax.inject.Inject
 
 private const val TAG = "UserPreferencesRepository"
 
-class UserPreferencesRepository(
+class UserPreferencesRepository @Inject constructor(
     private val userPreferencesStore: DataStore<Preferences>, // To be injected
 ) {
     private object PreferencesKeys {
@@ -52,6 +52,8 @@ class UserPreferencesRepository(
             Log.i(TAG, "User preferences: $preferences")
         }
     }
+
+    suspend fun clearPrefs() = userPreferencesStore.edit { it.clear() }
 }
 
 data class UserPreferences(

@@ -1,39 +1,25 @@
 package com.example.morningroutine
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.datastore.preferences.preferencesDataStore
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import com.example.morningroutine.core.data.repository.StockRepository
 import com.example.morningroutine.core.data.repository.UserPreferencesRepository
 import com.example.morningroutine.ui.MrApp
-import com.example.morningroutine.ui.MrAppState
 import com.example.morningroutine.ui.rememberMrAppState
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private const val TAG = "MainActivity"
 
-class MainActivity : ComponentActivity() {
+@AndroidEntryPoint
+class MainActivity: ComponentActivity() {
 
-    private val viewModel: MainActivityViewModel by viewModels()
+    @Inject lateinit var userPreferencesRepository: UserPreferencesRepository
 
-    companion object {
-        private const val USER_PREFERENCES_NAME = "user_preferences"
-    }
-
-    private val Context.dataStore by preferencesDataStore(
-        name = USER_PREFERENCES_NAME
-    )
+    @Inject lateinit var stockRepository: StockRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // TODO add a splash Screen
@@ -54,12 +40,18 @@ class MainActivity : ComponentActivity() {
         // including IME animations, and go edge-to-edge
         // This also sets up the initial system bar style based on the platform theme
         // enableEdgeToEdge()
+
+
+        // To be removed
+        lifecycleScope.launch {
+            userPreferencesRepository.clearPrefs()
+        }
+
         setContent {
             MrApp(
                 appState = rememberMrAppState(
-                    userPreferencesRepository = UserPreferencesRepository(
-                        userPreferencesStore = dataStore
-                    )
+                    userPreferencesRepository = userPreferencesRepository,
+                    stockRepository = stockRepository
                 )
             )
         }

@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -59,6 +61,8 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview.android)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material3.adaptive.navigation.suite.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -67,6 +71,11 @@ dependencies {
     implementation(libs.material.icons.extended)
 
     implementation(libs.retrofit) // Retrofit
-    implementation(libs.converter.scalars) // Retrofit with Scalar Converter
     implementation(libs.androidx.datastore.preferences) // DataStore
+    implementation(libs.converter.gson) // Retrofit converter
+    implementation(libs.logging.interceptor)
+    implementation(libs.okhttp)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 }

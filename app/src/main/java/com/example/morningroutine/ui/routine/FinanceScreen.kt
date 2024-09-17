@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.morningroutine.core.theme.DarkColorScheme
 import com.example.morningroutine.core.theme.MrTheme
@@ -45,13 +46,11 @@ private const val TAG = "FinanceScreen"
 @Composable
 fun FinanceRoute(
     modifier: Modifier = Modifier,
-    viewModel: FinanceViewModel
+    viewModel: FinanceViewModel = hiltViewModel()
 ) {
-    val uiState: FinanceUIState by viewModel.financeUiState.collectAsStateWithLifecycle()
-
     FinanceScreen(
         modifier = modifier,
-        uiState = uiState,
+        viewModel = viewModel,
         onConfirmAdd = viewModel::addSymbol
     )
 }
@@ -59,7 +58,7 @@ fun FinanceRoute(
 @Composable
 fun FinanceScreen(
     modifier: Modifier = Modifier,
-    uiState: FinanceUIState = FinanceUIState.Loading,
+    viewModel: FinanceViewModel,
     onConfirmAdd: (String) -> Unit = {}
 ) {
     MrTheme {
@@ -71,17 +70,12 @@ fun FinanceScreen(
                 )
             },
         ) { padding ->
-            when (uiState) {
-                FinanceUIState.Loading -> {}
-                FinanceUIState.Error -> {}
-                is FinanceUIState.Success -> {
-                    StockList(
-                        modifier = modifier,
-                        padding = padding,
-                        stocks = uiState.stockSymbols
-                    )
-                }
-            }
+            val uiState: FinanceUIState by viewModel.financeUiState.collectAsStateWithLifecycle()
+            StockList(
+                modifier = modifier,
+                padding = padding,
+                uiState = uiState
+            )
         }
     }
 }
@@ -90,18 +84,31 @@ fun FinanceScreen(
 private fun StockList(
     modifier: Modifier,
     padding: PaddingValues,
-    stocks: List<String>
+    uiState: FinanceUIState
 ) {
-    LazyColumn(
-        modifier = modifier
-            .padding(padding)
-            .fillMaxSize(),
-    ) {
-        items(stocks.size) { index ->
-            RoutineCard(
-                modifier = modifier,
-                cardTitle = stocks[index]
-            )
+    when (uiState) {
+        FinanceUIState.Loading -> {
+            Log.i(TAG, "Loading")
+        }
+        FinanceUIState.Error -> {
+            Log.e(TAG, "Error")
+        }
+        is FinanceUIState.Success -> {
+            Log.i(TAG, "Success")
+            val stocks = uiState.stockSymbols
+
+            LazyColumn(
+                modifier = modifier
+                    .padding(padding)
+                    .fillMaxSize(),
+            ) {
+                items(stocks.size) { index ->
+                    RoutineCard(
+                        modifier = modifier,
+                        cardTitle = stocks[index]
+                    )
+                }
+            }
         }
     }
 }
@@ -129,6 +136,7 @@ private fun SmallFAB(
             properties = DialogProperties()
         ) {
            DialogContent(
+               padding = padding,
                onConfirmClick = { textInput ->
                    Log.i(TAG, "onConfirmClick, adding: $textInput")
                    onConfirmAdd(textInput)
@@ -141,10 +149,13 @@ private fun SmallFAB(
 
 @Composable
 private fun DialogContent(
+    padding: PaddingValues,
     onConfirmClick: (String) -> Unit,
 ) {
     Surface(
-        modifier = Modifier.wrapContentSize(),
+        modifier = Modifier
+            .wrapContentSize()
+            .padding(padding),
         shape = MaterialTheme.shapes.medium,
         tonalElevation = AlertDialogDefaults.TonalElevation
     ) {
@@ -174,14 +185,7 @@ private fun DialogContent(
 @Composable
 private fun DialogContentPreview() {
     DialogContent(
+        padding = PaddingValues(16.dp),
         onConfirmClick = {}
-    )
-}
-
-@Preview
-@Composable
-private fun FinanceScreenPreview() {
-    FinanceScreen(
-        uiState = FinanceUIState.Success(listOf("AAPL", "MSFT", "GOOGL"))
     )
 }

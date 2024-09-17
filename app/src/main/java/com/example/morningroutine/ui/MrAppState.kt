@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.example.morningroutine.core.data.repository.StockRepository
 import com.example.morningroutine.core.data.repository.UserPreferencesRepository
 import com.example.morningroutine.model.MorningRoutine
 import com.example.morningroutine.navigation.HOME_SCREEN_ROUTE
@@ -18,16 +19,16 @@ import com.example.morningroutine.navigation.TopLevelDestinations
 fun rememberMrAppState(
     navController: NavHostController = rememberNavController(),
     userPreferencesRepository: UserPreferencesRepository,
-    // stockRepository: StockRepository
+    stockRepository: StockRepository
 ): MrAppState {
-    return MrAppState(navController, userPreferencesRepository)
+    return MrAppState(navController, userPreferencesRepository, stockRepository)
 }
 
 @Stable
 class MrAppState(
     val navController: NavHostController,
     val userPreferencesRepository: UserPreferencesRepository,
-    // val stockRepository: StockRepository
+    val stockRepository: StockRepository
 ) {
 
     // Contains the stored morning routines
