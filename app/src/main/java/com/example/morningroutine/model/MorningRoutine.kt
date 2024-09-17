@@ -5,9 +5,10 @@ package com.example.morningroutine.model
  * TODO() : stored them with DataStore
  */
 enum class MorningRoutine (
-    val title: String
+    val title: String,
 ) {
     FINANCE(
-        title = "Finance"
-    )
+        title = "Finance",
+    ),
+    CLEAR_PREF(title = "Clear preferences")
 }

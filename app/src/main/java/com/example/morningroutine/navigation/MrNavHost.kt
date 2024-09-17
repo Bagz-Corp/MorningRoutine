@@ -22,7 +22,8 @@ fun MrNavHost(
             onRoutineClick = navController::navigateToRoutine
         )
         routineScreen(
-            appState.userPreferencesRepository
+            stockRepository = appState.stockRepository,
+            userPreferencesRepository = appState.userPreferencesRepository
         )
     }
 }
