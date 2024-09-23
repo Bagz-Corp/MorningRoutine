@@ -17,7 +17,7 @@ private const val TAG = "MainActivity"
 @AndroidEntryPoint
 class MainActivity: ComponentActivity() {
 
-    @Inject lateinit var userPreferencesRepository: UserPreferencesRepository
+    @Inject lateinit var dataStoreRepository: UserPreferencesRepository
 
     @Inject lateinit var stockRepository: StockRepository
 
@@ -44,13 +44,13 @@ class MainActivity: ComponentActivity() {
 
         // To be removed
         lifecycleScope.launch {
-            userPreferencesRepository.clearPrefs()
+            dataStoreRepository.clearPrefs()
         }
 
         setContent {
             MrApp(
                 appState = rememberMrAppState(
-                    userPreferencesRepository = userPreferencesRepository,
+                    dataStoreRepository = dataStoreRepository,
                     stockRepository = stockRepository
                 )
             )

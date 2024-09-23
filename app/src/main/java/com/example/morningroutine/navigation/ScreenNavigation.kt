@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.example.morningroutine.core.data.repository.StockRepository
+import com.example.morningroutine.core.data.repository.DataStoreRepository
 import com.example.morningroutine.core.data.repository.UserPreferencesRepository
 import com.example.morningroutine.ui.home.HomeScreenRoute
 import com.example.morningroutine.ui.routine.FinanceRoute
@@ -27,7 +28,7 @@ fun NavGraphBuilder.homeScreen(onRoutineClick: (String) -> Unit) {
 
 fun NavGraphBuilder.routineScreen(
     stockRepository: StockRepository,
-    userPreferencesRepository: UserPreferencesRepository
+    dataStoreRepository: UserPreferencesRepository
 ) {
     composable(
         route = ROUTINE_SCREEN_ROUTE
@@ -35,7 +36,7 @@ fun NavGraphBuilder.routineScreen(
         FinanceRoute(
              viewModel = FinanceViewModel(
                  stockRepository = stockRepository,
-                 userPreferencesRepository = userPreferencesRepository
+                 dataStoreRepository = dataStoreRepository
              )
         )
     }

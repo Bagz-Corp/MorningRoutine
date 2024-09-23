@@ -1,61 +1,24 @@
 package com.example.morningroutine.core.data.repository
 
-import android.util.Log
-import androidx.datastore.core.DataStore
-import androidx.datastore.core.IOException
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.stringSetPreferencesKey
-import com.example.morningroutine.core.data.repository.UserPreferencesRepository.PreferencesKeys.STOCK_SYMBOLS
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.example.morningroutine.model.MorningRoutine
+import com.example.morningroutine.model.Routine
+import com.example.morningroutine.model.RoutineType
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.mapLatest
-import javax.inject.Inject
 
-private const val TAG = "UserPreferencesRepository"
+interface UserPreferencesRepository {
 
-class UserPreferencesRepository @Inject constructor(
-    private val userPreferencesStore: DataStore<Preferences>, // To be injected
-) {
-    private object PreferencesKeys {
-        val STOCK_SYMBOLS = stringSetPreferencesKey("stockSymbols")
-    }
+    val userPreferencesFlow: Flow<UserData>
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val userPreferencesFlow: Flow<UserPreferences> = userPreferencesStore.data
-        .catch { exception ->
-            if (exception is IOException) { // error while reading data
-                Log.e(TAG, "Error reading preferences.", exception)
-                emit(emptyPreferences())
-            } else {
-                throw exception
-            }
-        }
-        .mapLatest { preferences ->
-            val stockSymbols = preferences[STOCK_SYMBOLS] ?: emptySet()
-            Log.i(TAG, "User preferences: $stockSymbols")
-            UserPreferences(stockSymbols.toList())
-        }
+    suspend fun updateStockSymbols(stockSymbols: List<String>)
 
-    suspend fun updateStockSymbols(stockSymbols: List<String>) {
-        userPreferencesStore.edit { preferences ->
-            preferences[STOCK_SYMBOLS] = stockSymbols.toSet()
-        }
-    }
+    suspend fun addStockSymbol(stockSymbol: String)
 
-    suspend fun addStockSymbol(stockSymbol: String) {
-        userPreferencesStore.edit { preferences ->
-            val currentSymbols = preferences[STOCK_SYMBOLS] ?: emptySet()
-            preferences[STOCK_SYMBOLS] = currentSymbols + stockSymbol.trim()
-            Log.i(TAG, "User preferences: $preferences")
-        }
-    }
+    suspend fun clearPrefs()
 
-    suspend fun clearPrefs() = userPreferencesStore.edit { it.clear() }
+    suspend fun addRoutine(routineType: Int)
 }
 
-data class UserPreferences(
+data class UserData(
+    val registeredRoutines: List<Int>,
     val stockSymbols: List<String>
 )

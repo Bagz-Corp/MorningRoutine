@@ -4,7 +4,11 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.morningroutine.core.data.repository.StockRepository
+import com.example.morningroutine.core.data.repository.DataStoreRepository
 import com.example.morningroutine.core.data.repository.UserPreferencesRepository
+import com.example.morningroutine.model.Routine
+import com.example.morningroutine.model.RoutineFinance
+import com.example.morningroutine.model.RoutineType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +26,7 @@ private const val TAG = "FinanceViewModel"
 @HiltViewModel
 class FinanceViewModel @Inject constructor(
     val stockRepository: StockRepository,
-    val userPreferencesRepository: UserPreferencesRepository
+    val dataStoreRepository: UserPreferencesRepository
 ) : ViewModel() {
 
     val financeUiState: StateFlow<FinanceUIState> = concatenatedFlow.stateIn(
@@ -33,37 +37,19 @@ class FinanceViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val concatenatedFlow : Flow<FinanceUIState>
-        get() = userPreferencesRepository.userPreferencesFlow
+        get() = dataStoreRepository.userPreferencesFlow
             .flatMapConcat { userPreferences ->
                 Log.i(TAG, "UserPreferences: $userPreferences")
 
-                stockRepository.getIntradayInfo(userPreferences.stockSymbols).map {
+                val stockSymbols = userPreferences.stockSymbols
+
+                stockRepository.getIntradayInfo(stockSymbols).map {
                     Log.i(TAG, "Stock info received $it")
                     FinanceUIState.Success(
-                        stockSymbols = userPreferences.stockSymbols,
+                        stockSymbols = stockSymbols,
                         stockInfo = it
                     )
                 }
-
-                /* val symbols = userPreferences.stockSymbols
-                if (symbols.isNotEmpty()) {
-                    Log.i(TAG, "Fetching stock info for: $symbols")
-
-                    stockRepository.getIntradayInfo(symbols).map {
-                        Log.i(TAG, "Stock info received $it")
-                        FinanceUIState.Success(
-                            stockSymbols = userPreferences.stockSymbols,
-                            stockInfo = it
-                        )
-                    }
-                } else {
-                    flow {
-                        FinanceUIState.Success(
-                            stockSymbols = symbols,
-                            stockInfo = emptyList()
-                        )
-                    }
-                } */
             }.catch {
                 FinanceUIState.Error
             }
@@ -71,7 +57,7 @@ class FinanceViewModel @Inject constructor(
     fun addSymbol(symbol: String) {
         viewModelScope.launch {
             Log.i(TAG, "addSymbol: $symbol")
-            userPreferencesRepository.addStockSymbol(symbol)
+            dataStoreRepository.addStockSymbol(symbol)
         }
     }
 }

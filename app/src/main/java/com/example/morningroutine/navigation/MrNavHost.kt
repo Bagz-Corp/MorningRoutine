@@ -23,7 +23,7 @@ fun MrNavHost(
         )
         routineScreen(
             stockRepository = appState.stockRepository,
-            userPreferencesRepository = appState.userPreferencesRepository
+            dataStoreRepository = appState.dataStoreRepository
         )
     }
 }

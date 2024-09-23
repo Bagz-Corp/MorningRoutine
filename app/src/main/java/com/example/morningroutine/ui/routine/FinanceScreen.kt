@@ -39,7 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.morningroutine.core.theme.DarkColorScheme
 import com.example.morningroutine.core.theme.MrTheme
-import com.example.morningroutine.core.ui.RoutineCard
+import com.example.morningroutine.core.ui.StockCard
 
 private const val TAG = "FinanceScreen"
 
@@ -103,7 +103,7 @@ private fun StockList(
                     .fillMaxSize(),
             ) {
                 items(stocks.size) { index ->
-                    RoutineCard(
+                    StockCard(
                         modifier = modifier,
                         cardTitle = stocks[index]
                     )
