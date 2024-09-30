@@ -3,6 +3,7 @@
 package com.example.morningroutine.ui.routine
 
 import android.util.Log
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,45 +40,27 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.morningroutine.core.theme.DarkColorScheme
-import com.example.morningroutine.core.theme.MrTheme
 import com.example.morningroutine.core.ui.StockCard
 
 private const val TAG = "FinanceScreen"
 
 @Composable
-fun FinanceRoute(
-    modifier: Modifier = Modifier,
-    viewModel: FinanceViewModel = hiltViewModel()
-) {
-    FinanceScreen(
-        modifier = modifier,
-        viewModel = viewModel,
-        onConfirmAdd = viewModel::addSymbol
-    )
-}
-
-@Composable
 fun FinanceScreen(
     modifier: Modifier = Modifier,
-    viewModel: FinanceViewModel,
-    onConfirmAdd: (String) -> Unit = {}
+    viewModel: FinanceViewModel = hiltViewModel(),
 ) {
-    MrTheme {
-        Scaffold(
+    Log.i(TAG, "FinanceScreen")
+    Scaffold(
+        modifier = modifier,
+        floatingActionButton = { SmallFAB(onConfirmAdd = viewModel::addSymbol) },
+    ) { padding ->
+        Log.i(TAG, "Enter the Scaffold")
+        val uiState: FinanceUIState by viewModel.financeUiState.collectAsStateWithLifecycle()
+        StockList(
             modifier = modifier,
-            floatingActionButton = {
-                SmallFAB(
-                    onConfirmAdd = onConfirmAdd
-                )
-            },
-        ) { padding ->
-            val uiState: FinanceUIState by viewModel.financeUiState.collectAsStateWithLifecycle()
-            StockList(
-                modifier = modifier,
-                padding = padding,
-                uiState = uiState
-            )
-        }
+            padding = padding,
+            uiState = uiState
+        )
     }
 }
 
@@ -86,16 +70,26 @@ private fun StockList(
     padding: PaddingValues,
     uiState: FinanceUIState
 ) {
+    Log.i(TAG, "StockList")
+    var loading by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf(false) }
+
     when (uiState) {
         FinanceUIState.Loading -> {
             Log.i(TAG, "Loading")
+            loading = true
         }
-        FinanceUIState.Error -> {
-            Log.e(TAG, "Error")
+        is FinanceUIState.Error -> {
+            loading = false
+            error = true
+            Log.e(TAG, "Error: ${uiState.errorMessage}")
         }
         is FinanceUIState.Success -> {
+            loading = false
+            error = false
             Log.i(TAG, "Success")
-            val stocks = uiState.stockSymbols
+
+            val stocks = uiState.stockInfo
 
             LazyColumn(
                 modifier = modifier
@@ -105,11 +99,24 @@ private fun StockList(
                 items(stocks.size) { index ->
                     StockCard(
                         modifier = modifier,
-                        cardTitle = stocks[index]
+                        cardInfo = stocks[index]
                     )
                 }
             }
         }
+    }
+
+    if (loading) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+
+    if (error) {
+        Text("Error has occurred")
     }
 }
 
@@ -118,6 +125,7 @@ private fun SmallFAB(
     padding: PaddingValues = PaddingValues(16.dp),
     onConfirmAdd: (String) -> Unit
 ) {
+    Log.i(TAG, "SmallFAB")
     val openDialog = remember { mutableStateOf(false) }
 
     SmallFloatingActionButton(
@@ -152,6 +160,7 @@ private fun DialogContent(
     padding: PaddingValues,
     onConfirmClick: (String) -> Unit,
 ) {
+    Log.i(TAG, "DialogContent")
     Surface(
         modifier = Modifier
             .wrapContentSize()
@@ -161,7 +170,9 @@ private fun DialogContent(
     ) {
         var symbol by rememberSaveable { mutableStateOf("") }
 
-        Column {
+        Column(
+            modifier = Modifier.padding(padding)
+        ) {
             Text(text = "Type the symbol of the stock to add to the list")
             Spacer(modifier = Modifier.height(16.dp))
             TextField(

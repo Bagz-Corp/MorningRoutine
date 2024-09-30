@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCard
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -25,29 +24,39 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.morningroutine.model.Routine
-import com.example.morningroutine.model.RoutineFinance
 import com.example.morningroutine.model.RoutineType
-import com.example.morningroutine.navigation.TopLevelDestinations
 import com.example.morningroutine.ui.routine.StockInfo
 
 @Composable
 fun StockCard(
     modifier: Modifier,
     icon: ImageVector = Icons.Filled.ChevronRight,
-    cardTitle: String
+    cardInfo: StockInfo
 ) {
     Column(
         modifier = modifier
     ) {
         ListItem(
-            headlineContent = { Text(cardTitle) },
+            headlineContent = { Text(cardInfo.name) },
             leadingContent = {
                 Icon(
-                    icon,
+                    imageVector = icon,
                     contentDescription = "Localized description",
+                )
+            },
+            trailingContent = {
+                Text(
+                    text = "Stock Value = ${cardInfo.latestValue}"
+                )
+            },
+            supportingContent = {
+                Text(
+                    fontStyle = FontStyle.Italic,
+                    text = "Last updated Date : ${cardInfo.lastUpdateDateTime}"
                 )
             }
         )
@@ -58,7 +67,7 @@ fun StockCard(
 @Composable
 fun RoutineCard(
     routineType: RoutineType,
-    onCardClick: (String) -> Unit,
+    onCardClick: (RoutineType) -> Unit,
 ) {
     var isClicked by remember { mutableStateOf(false) }
     val scale = animateFloatAsState(
@@ -66,9 +75,10 @@ fun RoutineCard(
         label = ""
     )
 
+
     val routineItem: Routine = when (routineType) {
         RoutineType.FINANCE -> {
-            RoutineFinance()
+            Routine.RoutineFinance()
         }
         else -> {
             return
@@ -84,7 +94,7 @@ fun RoutineCard(
             .scale(scale.value)
             .clickable {
                 isClicked = !isClicked
-                onCardClick(cardTitle)
+                onCardClick(routineType)
             },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         content = {
@@ -112,7 +122,12 @@ fun RoutineCard(
 @Preview
 fun StockCardPreview() = StockCard(
     modifier = Modifier,
-    cardTitle = "Test"
+    cardInfo = StockInfo(
+        name = "Test",
+        latestValue = "123",
+        lastUpdateDateTime = java.util.Date(),
+        symbol = "TST"
+    )
 )
 
 @Composable

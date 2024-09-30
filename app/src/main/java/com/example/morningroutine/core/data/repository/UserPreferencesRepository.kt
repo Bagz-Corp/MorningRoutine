@@ -1,24 +1,30 @@
 package com.example.morningroutine.core.data.repository
 
-import com.example.morningroutine.model.MorningRoutine
-import com.example.morningroutine.model.Routine
-import com.example.morningroutine.model.RoutineType
 import kotlinx.coroutines.flow.Flow
 
 interface UserPreferencesRepository {
 
-    val userPreferencesFlow: Flow<UserData>
+    // General User Data
+    val userDataFlow: Flow<UserData>
 
-    suspend fun updateStockSymbols(stockSymbols: List<String>)
+    // Specific Finance Data
+    val financeUserDataFlow: Flow<FinanceUserData>
 
+    /** Add a Stock Symbol to userPreferences */
     suspend fun addStockSymbol(stockSymbol: String)
 
-    suspend fun clearPrefs()
+    suspend fun clearStocksPrefs()
 
+    /** Add a Routine to userPreferences */
     suspend fun addRoutine(routineType: Int)
 }
 
 data class UserData(
+    /** The list of the routines the user registered for */
     val registeredRoutines: List<Int>,
-    val stockSymbols: List<String>
+)
+
+data class FinanceUserData(
+    /** The list of symbols the user added */
+    val stockSymbols: List<String> = emptyList()
 )

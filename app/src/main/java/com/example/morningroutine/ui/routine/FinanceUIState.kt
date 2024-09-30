@@ -5,9 +5,9 @@ sealed interface FinanceUIState {
     data object Loading : FinanceUIState
 
     data class Success(
-        val stockSymbols: List<String>,
-        val stockInfo: List<StockInfo>
+        val stockSymbols: List<String> = emptyList(),
+        val stockInfo: List<StockInfo> = emptyList()
     ) : FinanceUIState
 
-    data object Error : FinanceUIState
+    data class Error(val errorMessage: String?) : FinanceUIState
 }

@@ -21,8 +21,7 @@ internal object NetworkModule {
     @Singleton
     fun okHttpCallFactory(): Call.Factory = trace("MrOkHttp") {
         OkHttpClient.Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
             .connectTimeout(OKHTTP_TIMEOUT, TimeUnit.MILLISECONDS)
             .readTimeout(OKHTTP_TIMEOUT, TimeUnit.MILLISECONDS)
             .writeTimeout(OKHTTP_TIMEOUT, TimeUnit.MILLISECONDS)

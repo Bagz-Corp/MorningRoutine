@@ -3,8 +3,6 @@ package com.example.morningroutine.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -14,19 +12,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
 import com.example.morningroutine.core.MrNavigationScaffold
-import com.example.morningroutine.core.data.repository.DataStoreRepository
-import com.example.morningroutine.core.theme.MrTheme
 import com.example.morningroutine.navigation.MrNavHost
 import com.example.morningroutine.navigation.TopLevelDestinations
 
 @Composable
 fun MrApp(
-    appState: MrAppState,
     modifier: Modifier = Modifier,
 ) {
+    val appState = rememberMrAppState()
     val currentDestination = appState.currentTopLevelDestination
     
     Scaffold(
@@ -62,7 +56,10 @@ fun MrApp(
                     }
                 }
             ) {
-                MrNavHost(appState = appState, modifier = modifier)
+                MrNavHost(
+                    navController = appState.navController,
+                    modifier = modifier
+                )
             }
         }
     }
