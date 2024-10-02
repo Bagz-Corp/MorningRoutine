@@ -63,7 +63,7 @@ fun HomeBody(
             }
 
             LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+                columns = GridCells.Adaptive(220.dp),
                 contentPadding = PaddingValues(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -85,5 +85,10 @@ fun HomeBody(
 @Preview
 @Composable
 fun DefaultPreview() {
-    HomeScreen(onRoutineClick = {})
+    HomeBody(
+        uiState = HomeUIState.Success(
+            routines = listOf(0, 1)
+        ),
+        onItemClick = { }
+    )
 }
