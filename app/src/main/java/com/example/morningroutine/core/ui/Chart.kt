@@ -16,9 +16,15 @@ import com.example.morningroutine.core.theme.Green80
 import com.example.morningroutine.core.theme.Red80
 
 @Composable
+/**
+ *  Composable Component displaying a simple chart from the values given.
+ *  x axis should be based on the [DateRange] enum class
+ *  y axis represents the values given
+ */
 fun Chart(
     values: List<Float>,
-    dateRange: DateRange
+    dateRange: DateRange,
+    modifier: Modifier = Modifier
 ) {
     // Get number of x points
     val listSize = when(dateRange) {
@@ -42,11 +48,12 @@ fun Chart(
     val min = shownValues.min()
     val max = shownValues.max()
 
+    // Update line color according to values evolution
     val lineColor =
         if (shownValues.last() > shownValues.first()) Green80 else Red80
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 8.dp, vertical = 12.dp)
             .background(Color.Gray),
@@ -56,7 +63,7 @@ fun Chart(
             val toValuePercentage = getValuePercentageForRange(pair.second, max, min)
 
             Canvas(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxHeight()
                     .weight(1f),
                 onDraw = {
@@ -83,7 +90,7 @@ fun Chart(
     }
 }
 
-
+/** Specify the range of the chart to be covered */
 enum class DateRange {
     WEEK, MONTH, YEAR
 }

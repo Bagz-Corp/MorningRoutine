@@ -1,15 +1,11 @@
 package com.example.morningroutine.ui.home
 
-import androidx.appcompat.widget.ButtonBarLayout
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -20,7 +16,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.morningroutine.core.ui.RoutineCard
 import com.example.morningroutine.model.RoutineType
-import com.google.android.material.button.MaterialButton
 
 @Composable
 fun HomeScreen(
@@ -40,11 +35,6 @@ fun HomeScreen(
             uiState = uiState,
             onItemClick = onRoutineClick
         )
-        Button(
-            onClick = { viewModel.clearPrefs() }
-        ) {
-            Text("Clear Prefs")
-        }
     }
 }
 

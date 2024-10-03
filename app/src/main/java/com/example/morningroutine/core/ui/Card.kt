@@ -31,6 +31,8 @@ import com.example.morningroutine.model.Routine
 import com.example.morningroutine.model.RoutineType
 import com.example.morningroutine.ui.routine.StockInfo
 
+// APIs parameters should be reviewed here for scalability
+
 @Composable
 fun StockCard(
     modifier: Modifier,
@@ -74,7 +76,6 @@ fun RoutineCard(
         targetValue = if (isClicked) 1.1f else 1f,
         label = ""
     )
-
 
     val routineItem: Routine = when (routineType) {
         RoutineType.FINANCE -> {

@@ -60,4 +60,7 @@ class MrAppState(
             }
         }
     }
+
+    fun navigateBack() = navController.popBackStack()
+
 }
