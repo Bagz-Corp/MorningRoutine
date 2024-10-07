@@ -13,4 +13,5 @@
 
     <string name="main_app_title">Morning Routines</string>"
     <string name="finance">Finance</string>"
+    <string name="stub">Stub</string>"
 </resources>

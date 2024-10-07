@@ -81,6 +81,8 @@ fun RoutineCard(
         RoutineType.FINANCE -> {
             Routine.RoutineFinance()
         }
+        RoutineType.ROUTINE2 -> Routine.StubRoutine1
+        RoutineType.ROUTINE3 -> Routine.StubRoutine2
         else -> {
             return
         }

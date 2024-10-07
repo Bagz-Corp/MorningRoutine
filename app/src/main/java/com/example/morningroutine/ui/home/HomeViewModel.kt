@@ -21,7 +21,12 @@ class HomeViewModel @Inject constructor(
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModel() {
 
-    private val defaultRoutines: List<RoutineType> = listOf(RoutineType.FINANCE)
+    /** Preselected routines for the user */
+    private val defaultRoutines: List<RoutineType> = listOf(
+        RoutineType.FINANCE,
+        RoutineType.ROUTINE2,
+        RoutineType.ROUTINE3
+    )
 
     init {
         // Add default routines to user preferences

@@ -45,7 +45,7 @@ fun MrApp(
                     currentDestination = currentDestination,
                     modifier = modifier,
                     onNavigationClick = { appState.navigateBack() },
-                    onActionClick = { showSettingsDialog = true }
+                    onActionClick = { showSettingsDialog = true },
                 )
             }
          },
@@ -128,12 +128,16 @@ fun MrTopBar(
             }
         },
         navigationIcon = {
-            IconButton(onClick = onNavigationClick) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Settings",
-                    tint = MaterialTheme.colorScheme.onSurface,
-                )
+            if (currentDestination != TopLevelDestinations.HOME) {
+                IconButton(
+                    onClick = onNavigationClick,
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
             }
         }
     )

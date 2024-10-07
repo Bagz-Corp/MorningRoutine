@@ -47,5 +47,6 @@ fun NavHostController.navigateTo(routineType: RoutineType, navOptions: NavOption
         RoutineType.HOME -> navigate(HomeScreenRoute, navOptions)
         RoutineType.FINANCE -> navigate(FinanceScreenRoute, navOptions)
         RoutineType.UNKNOWN -> {}
+        else -> {}
     }
 }
