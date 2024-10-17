@@ -1,5 +1,6 @@
 package com.example.morningroutine.ui.routine
 
+// TODO review ui state as data class with wrapper class for specific data
 sealed interface FinanceUIState {
 
     data object Loading : FinanceUIState

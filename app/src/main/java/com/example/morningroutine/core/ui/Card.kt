@@ -58,7 +58,7 @@ fun StockCard(
             supportingContent = {
                 Text(
                     fontStyle = FontStyle.Italic,
-                    text = "Last updated Date : ${cardInfo.lastUpdateDateTime}"
+                    text = "Value at : ${cardInfo.lastUpdateDateTime}"
                 )
             }
         )

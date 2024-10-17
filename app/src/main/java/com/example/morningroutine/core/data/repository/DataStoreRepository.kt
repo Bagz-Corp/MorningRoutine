@@ -6,7 +6,9 @@ import androidx.datastore.core.IOException
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
+import com.example.morningroutine.core.data.repository.DataStoreRepository.PreferencesKeys.LAST_UPDATED
 import com.example.morningroutine.core.data.repository.DataStoreRepository.PreferencesKeys.ROUTINES
 import com.example.morningroutine.core.data.repository.DataStoreRepository.PreferencesKeys.STOCK_SYMBOLS
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.mapLatest
+import java.util.Date
 import javax.inject.Inject
 
 private const val TAG = "UserPreferencesRepository"
@@ -26,6 +29,7 @@ class DataStoreRepository @Inject constructor(
     private object PreferencesKeys {
         val STOCK_SYMBOLS = stringSetPreferencesKey("stockSymbols")
         val ROUTINES = stringSetPreferencesKey("routines")
+        val LAST_UPDATED = longPreferencesKey("lastUpdated")
     }
 
     override suspend fun addRoutine(routineType: Int) {
@@ -39,6 +43,7 @@ class DataStoreRepository @Inject constructor(
             handleError(exception)
         }
         .mapLatest { preferences ->
+            Log.i(TAG, "Updated user Data is now: ${preferences[ROUTINES]}")
             val registeredRoutines = preferences[ROUTINES]?.map { it.toInt() } ?: emptyList()
             UserData(
                 registeredRoutines = registeredRoutines
@@ -51,8 +56,10 @@ class DataStoreRepository @Inject constructor(
             handleError(exception)
         }
         .mapLatest { prefs ->
+            Log.i(TAG, "Updated Finance User Data is now: ${prefs[STOCK_SYMBOLS]}")
             FinanceUserData(
-                stockSymbols = prefs[STOCK_SYMBOLS]?.toList() ?: emptyList()
+                stockSymbols = prefs[STOCK_SYMBOLS]?.toList() ?: emptyList(),
+                lastUpdatedTime = prefs[LAST_UPDATED]
             )
         }
 
@@ -68,6 +75,12 @@ class DataStoreRepository @Inject constructor(
     override suspend fun clearStocksPrefs() {
         userPreferencesStore.edit { it[STOCK_SYMBOLS] = emptySet() }
         Log.i(TAG, "STOCK_SYMBOLS cleared")
+    }
+
+    override suspend fun updateLastUpdatedTime() {
+        val time = Date().time
+        userPreferencesStore.edit { it[LAST_UPDATED] = time }
+        Log.i(TAG, "LAST_UPDATED updated to $time")
     }
 
     private suspend fun FlowCollector<Preferences>.handleError(

@@ -22,5 +22,4 @@ class StockRepositoryImpl @Inject constructor(
         } catch (e: Error) {
             throw e
         }
-
 }

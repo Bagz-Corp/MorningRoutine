@@ -26,10 +26,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,6 +45,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.morningroutine.core.theme.DarkColorScheme
 import com.example.morningroutine.core.ui.StockCard
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.launch
 
 private const val TAG = "FinanceScreen"
 
@@ -49,18 +55,41 @@ fun FinanceScreen(
     modifier: Modifier = Modifier,
     viewModel: FinanceViewModel = hiltViewModel(),
 ) {
+    var isRefreshing by remember { mutableStateOf(false) }
+    val uiState: FinanceUIState by viewModel.financeUiState.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
+    val pullTeRefreshState = rememberPullToRefreshState()
+
     Log.i(TAG, "FinanceScreen")
     Scaffold(
         modifier = modifier,
         floatingActionButton = { SmallFAB(onConfirmAdd = viewModel::addSymbol) },
     ) { padding ->
         Log.i(TAG, "Enter the Scaffold")
-        val uiState: FinanceUIState by viewModel.financeUiState.collectAsStateWithLifecycle()
-        StockList(
-            modifier = modifier,
-            padding = padding,
-            uiState = uiState
-        )
+        PullToRefreshBox(
+            state = pullTeRefreshState,
+            isRefreshing = isRefreshing,
+            onRefresh = {
+                isRefreshing = true
+                scope.launch {
+                    viewModel.refresh()
+                    isRefreshing = false
+                }
+            },
+            indicator = {
+                PullToRefreshDefaults.Indicator(
+                    state = pullTeRefreshState,
+                    isRefreshing = isRefreshing,
+                    modifier = Modifier.align(Alignment.TopCenter),
+                )
+            }
+        ) {
+            StockList(
+                modifier = modifier,
+                padding = padding,
+                uiState = uiState
+            )
+        }
     }
 }
 

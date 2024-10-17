@@ -4,7 +4,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-private const val ACCESS_KEY = "3e1aa6e455dbf3709d3edb22a98d2901"
+private const val ACCESS_KEY = "baf52049b27c483cbca06d0ff540ac73"
 
 interface MrApi {
     @GET("/v1/intraday")
