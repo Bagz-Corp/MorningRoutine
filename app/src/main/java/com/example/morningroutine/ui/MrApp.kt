@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -67,28 +68,34 @@ fun MrApp(
             )
         }
 
-        MrNavigationScaffold(
-            modifier = modifier.padding(padding),
-            navigationSuiteItems = {
-                appState.topLevelDestinations.forEach { topLevelDestination ->
-                    item(
-                        selected = currentDestination == topLevelDestination,
-                        onClick = { appState.navigateToTopLevelDestination(topLevelDestination) },
-                        icon = {
-                            Icon(
-                                imageVector = topLevelDestination.selectedIcon,
-                                contentDescription = null
-                            )
-                        }
-                    )
-                }
-            }
-        ) {
-            MrNavHost(
-                navController = appState.navController,
-                modifier = modifier
-            )
-        }
+//        MrNavigationScaffold(
+//            modifier = modifier.padding(padding),
+//            navigationSuiteItems = {
+//                appState.topLevelDestinations.forEach { topLevelDestination ->
+//                    item(
+//                        selected = currentDestination == topLevelDestination,
+//                        onClick = { appState.navigateToTopLevelDestination(topLevelDestination) },
+//                        icon = {
+//                            Icon(
+//                                imageVector = topLevelDestination.selectedIcon,
+//                                contentDescription = null
+//                            )
+//                        }
+//                    )
+//                }
+//            },
+//            layoutType = NavigationSuiteType.NavigationRail
+//        ) {
+//            MrNavHost(
+//                navController = appState.navController,
+//                modifier = modifier
+//            )
+//        }
+
+        MrNavHost(
+            navController = appState.navController,
+            modifier = modifier.padding(padding)
+        )
 
         LaunchedEffect(key1 = showSnackBar) {
             if (showSnackBar) {

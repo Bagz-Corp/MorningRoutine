@@ -1,5 +1,11 @@
 package com.example.morningroutine.core
 
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCard
+import androidx.compose.material.icons.filled.Bed
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -14,15 +20,18 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.morningroutine.core.theme.Purple30
+import com.example.morningroutine.core.theme.Purple80
+import com.example.morningroutine.core.theme.PurpleGray60
 
 @Composable
 fun MrNavigationScaffold(
     modifier: Modifier = Modifier,
     navigationSuiteItems: MrNavigationSuiteScope.() -> Unit,
-    content: @Composable () -> Unit
+    layoutType: NavigationSuiteType = NavigationSuiteType.NavigationBar,
+    content: @Composable () -> Unit,
 ) {
-    val layoutType: NavigationSuiteType = NavigationSuiteType.NavigationBar
-
     val itemColors = NavigationSuiteItemColors(
         navigationBarItemColors = NavigationBarItemDefaults.colors(
             indicatorColor = MrNavigationDefaults.navigationIndicatorColor(),
@@ -45,7 +54,6 @@ fun MrNavigationScaffold(
         },
         layoutType = layoutType,
         modifier = modifier,
-        containerColor = Color.Transparent,
     ) {
         content()
     }
@@ -90,4 +98,46 @@ object MrNavigationDefaults {
 
     @Composable
     fun navigationIndicatorColor() = MaterialTheme.colorScheme.primaryContainer
+}
+
+@Preview()
+@Composable
+private fun NavigationBarPreview() {
+    MrNavigationScaffold(
+        navigationSuiteItems = {
+            item(
+                selected = true,
+                onClick = {},
+                icon = {
+                    Icon(
+                        imageVector = Icons.Filled.Home,
+                        contentDescription = null
+                    )
+                }
+            )
+            item(
+                selected = false,
+                onClick = {},
+                icon = {
+                    Icon(
+                        imageVector = Icons.Filled.AddCard,
+                        contentDescription = null
+                    )
+                }
+            )
+            item(
+                selected = false,
+                onClick = {},
+                icon = {
+                    Icon(
+                        imageVector = Icons.Filled.Bed,
+                        contentDescription = null
+                    )
+                }
+            )
+        },
+        layoutType = NavigationSuiteType.NavigationRail
+    ) {
+
+    }
 }
