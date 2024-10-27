@@ -27,19 +27,15 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.morningroutine.core.theme.Purple10
 import com.example.morningroutine.core.theme.Purple40
-import com.example.morningroutine.core.theme.Purple90
+import com.example.morningroutine.model.Destination
 import com.example.morningroutine.model.Routine
-import com.example.morningroutine.model.RoutineType
 import com.example.morningroutine.ui.routine.StockInfo
 
 // APIs parameters should be reviewed here for scalability
@@ -48,12 +44,14 @@ import com.example.morningroutine.ui.routine.StockInfo
 fun StockCard(
     modifier: Modifier,
     icon: ImageVector = Icons.Filled.ChevronRight,
-    cardInfo: StockInfo
+    cardInfo: StockInfo,
+    onCardClick: (StockInfo) -> Unit = {}
 ) {
     Column(
         modifier = modifier
     ) {
         ListItem(
+            modifier = Modifier.clickable { onCardClick(cardInfo) },
             headlineContent = { Text(cardInfo.name) },
             leadingContent = {
                 Icon(
@@ -79,8 +77,8 @@ fun StockCard(
 
 @Composable
 fun RoutineCard(
-    routineType: RoutineType,
-    onCardClick: (RoutineType) -> Unit,
+    destination: Destination,
+    onCardClick: (Destination) -> Unit,
 ) {
     var isClicked by remember { mutableStateOf(false) }
     val scale = animateFloatAsState(
@@ -97,8 +95,8 @@ fun RoutineCard(
     val routineItem: Routine
     var contentColor: Color = Color.Black
 
-    when (routineType) {
-        RoutineType.FINANCE -> {
+    when (destination) {
+        Destination.FINANCE -> {
             brush = Brush.linearGradient(
                 colors = listOf(
                     Color.Black,
@@ -108,11 +106,8 @@ fun RoutineCard(
             routineItem = Routine.RoutineFinance()
             contentColor = Color.White
         }
-        RoutineType.ROUTINE2 -> {
+        Destination.ROUTINE2 -> {
             routineItem = Routine.StubRoutine1
-        }
-        RoutineType.ROUTINE3 -> {
-            routineItem = Routine.StubRoutine2
         }
         else -> {
             return
@@ -127,7 +122,7 @@ fun RoutineCard(
             .scale(scale.value)
             .clickable {
                 isClicked = !isClicked
-                onCardClick(routineType)
+                onCardClick(destination)
             },
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         content = {
@@ -174,13 +169,13 @@ fun StockCardPreview() = StockCard(
 @Composable
 @Preview
 fun RoutineCardPreview() = RoutineCard(
-    routineType = RoutineType.FINANCE,
+    destination = Destination.FINANCE,
     onCardClick = {}
 )
 
 @Composable
 @Preview
 fun StubCardPreview() = RoutineCard(
-    routineType = RoutineType.ROUTINE2,
+    destination = Destination.ROUTINE2,
     onCardClick = {}
 )

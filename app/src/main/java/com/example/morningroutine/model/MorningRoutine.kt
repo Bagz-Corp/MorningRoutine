@@ -17,19 +17,19 @@ sealed class Routine(
     ): Routine(
         title = R.string.finance,
         icon = Icons.Filled.AttachMoney,
-        type = RoutineType.FINANCE.type
+        type = Destination.FINANCE.type
     )
 
     object StubRoutine1: Routine(
         title = R.string.stub,
         icon = Icons.Filled.BugReport,
-        type = RoutineType.ROUTINE2.type
+        type = Destination.ROUTINE2.type
     )
 
     object StubRoutine2: Routine(
         title = R.string.stub,
         icon = Icons.Filled.BugReport,
-        type = RoutineType.ROUTINE2.type
+        type = Destination.ROUTINE2.type
     )
 }
 
@@ -37,13 +37,20 @@ sealed class Routine(
  * ROUTINE2 and ROUTINE3 are here to show expected design on Home Screen. They should be replaced
  * with actual routines when implemented.
  */
-enum class RoutineType(val type: Int) {
-    UNKNOWN(0),
-    HOME(1),
-    FINANCE(2),
-    ROUTINE2(3),
-    ROUTINE3(4)
+enum class Destination(
+    val type: Int
+) {
+    UNKNOWN(type = 0),
+    HOME(type = 1),
+    FINANCE(type = 2),
+    STOCK_DETAILS(type = 3),
+    ROUTINE2(type = 4);
 }
 
-
-
+fun destinationFrom(type: Int): Destination = when (type) {
+    1 -> Destination.HOME
+    2 -> Destination.FINANCE
+    3 -> Destination.STOCK_DETAILS
+    4 -> Destination.ROUTINE2
+    else -> Destination.UNKNOWN
+}

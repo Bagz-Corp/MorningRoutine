@@ -1,5 +1,6 @@
 package com.example.morningroutine.ui.routine
 
+import kotlinx.serialization.Serializable
 import java.util.Date
 
 data class StockInfo(

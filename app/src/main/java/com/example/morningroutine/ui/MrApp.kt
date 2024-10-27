@@ -68,30 +68,6 @@ fun MrApp(
             )
         }
 
-//        MrNavigationScaffold(
-//            modifier = modifier.padding(padding),
-//            navigationSuiteItems = {
-//                appState.topLevelDestinations.forEach { topLevelDestination ->
-//                    item(
-//                        selected = currentDestination == topLevelDestination,
-//                        onClick = { appState.navigateToTopLevelDestination(topLevelDestination) },
-//                        icon = {
-//                            Icon(
-//                                imageVector = topLevelDestination.selectedIcon,
-//                                contentDescription = null
-//                            )
-//                        }
-//                    )
-//                }
-//            },
-//            layoutType = NavigationSuiteType.NavigationRail
-//        ) {
-//            MrNavHost(
-//                navController = appState.navController,
-//                modifier = modifier
-//            )
-//        }
-
         MrNavHost(
             navController = appState.navController,
             modifier = modifier.padding(padding)

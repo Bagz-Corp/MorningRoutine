@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialogDefaults
@@ -45,7 +46,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.morningroutine.core.theme.DarkColorScheme
 import com.example.morningroutine.core.ui.StockCard
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 
 private const val TAG = "FinanceScreen"
@@ -53,6 +53,7 @@ private const val TAG = "FinanceScreen"
 @Composable
 fun FinanceScreen(
     modifier: Modifier = Modifier,
+    onStockClick: (StockInfo) -> Unit,
     viewModel: FinanceViewModel = hiltViewModel(),
 ) {
     var isRefreshing by remember { mutableStateOf(false) }
@@ -87,7 +88,8 @@ fun FinanceScreen(
             StockList(
                 modifier = modifier,
                 padding = padding,
-                uiState = uiState
+                uiState = uiState,
+                onStockClick = onStockClick
             )
         }
     }
@@ -97,7 +99,8 @@ fun FinanceScreen(
 private fun StockList(
     modifier: Modifier,
     padding: PaddingValues,
-    uiState: FinanceUIState
+    uiState: FinanceUIState,
+    onStockClick: (StockInfo) -> Unit
 ) {
     Log.i(TAG, "StockList")
     var loading by remember { mutableStateOf(false) }
@@ -116,19 +119,17 @@ private fun StockList(
         is FinanceUIState.Success -> {
             loading = false
             error = false
-            Log.i(TAG, "Success")
-
-            val stocks = uiState.stockInfo
 
             LazyColumn(
                 modifier = modifier
                     .padding(padding)
                     .fillMaxSize(),
             ) {
-                items(stocks.size) { index ->
+                items(uiState.stockInfo) {
                     StockCard(
                         modifier = modifier,
-                        cardInfo = stocks[index]
+                        cardInfo = it,
+                        onCardClick = onStockClick
                     )
                 }
             }

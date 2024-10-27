@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -75,7 +74,7 @@ class FinanceViewModel @Inject constructor(
 
     private suspend fun getStockInfo(symbols: List<String>): List<StockInfo> {
         try {
-            return stockRepository.getIntradayInfo(symbols).also {
+            return stockRepository.getLatestValues(symbols).also {
                 Log.w(TAG, "Stock info received $it")
             }
         } catch (e: Error) {

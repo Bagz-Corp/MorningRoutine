@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.morningroutine.core.data.repository.UserPreferencesRepository
-import com.example.morningroutine.model.RoutineType
+import com.example.morningroutine.model.Destination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -22,10 +22,8 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     /** Preselected routines for the user */
-    private val defaultRoutines: List<RoutineType> = listOf(
-        RoutineType.FINANCE,
-        RoutineType.ROUTINE2,
-        RoutineType.ROUTINE3
+    private val defaultRoutines: List<Destination> = listOf(
+        Destination.FINANCE, Destination.ROUTINE2
     )
 
     init {
@@ -51,12 +49,6 @@ class HomeViewModel @Inject constructor(
     fun addRoutine(routineType: Int) {
         viewModelScope.launch {
             userPreferencesRepository.addRoutine(routineType)
-        }
-    }
-
-    fun clearPrefs() {
-        viewModelScope.launch {
-            userPreferencesRepository.clearStocksPrefs()
         }
     }
 }

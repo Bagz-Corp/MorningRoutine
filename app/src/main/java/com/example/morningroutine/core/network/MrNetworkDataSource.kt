@@ -11,6 +11,10 @@ import javax.inject.Inject
 interface MrNetworkDataSource {
     @Throws(Error::class)
     suspend fun getStockInfo(symbols: List<String> = emptyList()): List<StockInfo>
+
+    suspend fun getHistoricalValues(
+        symbol: String
+    ): List<Float>
 }
 
 private const val MARKET_STACK_BASE_URL = "https://api.marketstack.com/"
@@ -38,10 +42,9 @@ class RetrofitMrNetwork @Inject constructor(
     }
 
     override suspend fun getStockInfo(symbols: List<String>): List<StockInfo> {
-        val ret = marketStackApi.getIntraDay(
+        val ret = marketStackApi.getLatest(
             symbols = symbols.joinToString(separator = ","),
-            limit = symbols.size
-        )
+            )
 
         if (ret.isSuccessful) {
             return ret.body()?.data?.map {
@@ -56,4 +59,15 @@ class RetrofitMrNetwork @Inject constructor(
 
         throw Error(ret.message())
     }
+
+    override suspend fun getHistoricalValues(symbol: String): List<Float> =
+        with(marketStackApi.getIntraDay(symbol = symbol)) {
+            if (isSuccessful) {
+                return body()?.data?.map {
+                    it.last.toString().toFloat()
+                } ?: emptyList()
+            } else {
+                throw Error(message())
+            }
+        }
 }

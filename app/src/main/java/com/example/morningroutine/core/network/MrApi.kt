@@ -10,7 +10,15 @@ interface MrApi {
     @GET("/v1/intraday")
     suspend fun getIntraDay(
         @Query("access_key") accessKey: String = ACCESS_KEY,
+        @Query("symbols") symbol: String,
+        @Query("interval") interval: String = "24hour",
+        @Query("limit") limit: Int = 7
+    ): Response<BaseResponse<StockModel>>
+
+
+    @GET("/v1/intraday/latest")
+    suspend fun getLatest(
+        @Query("access_key") accessKey: String = ACCESS_KEY,
         @Query("symbols") symbols: String,
-        @Query("limit") limit: Int = 10
     ): Response<BaseResponse<StockModel>>
 }
