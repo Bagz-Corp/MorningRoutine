@@ -41,7 +41,7 @@ fun MrNavHost(
                     onStockClick = {
                         Log.i("NavHost", "Selecting Stock ${it.name}")
                         navController.navigate(
-                            StockRoute(
+                            route = StockRoute(
                                 symbol = it.symbol,
                                 name = it.name,
                                 value = it.latestValue
@@ -52,6 +52,7 @@ fun MrNavHost(
             }
 
             composable<StockRoute> {
+                Log.i("NavHost", "Navigating to StockRoute")
                 val args = it.toRoute<StockRoute>()
                 StockDetails(
                     stockInfo = StockInfo(
@@ -86,7 +87,6 @@ fun NavHostController.navigateTo(
     when (destination) {
         Destination.HOME -> navigate(Home, navOptions)
         Destination.FINANCE -> navigate(NestedFinanceNavigation, navOptions)
-        Destination.STOCK_DETAILS -> navigate(StockRoute, navOptions)
         Destination.UNKNOWN -> {}
         else -> {}
     }

@@ -79,9 +79,7 @@ fun MrApp(
                     message = "Preferences cleared"
                 )
             }
-
         }
-
     }
 }
 

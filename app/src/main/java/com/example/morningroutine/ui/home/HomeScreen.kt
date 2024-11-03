@@ -3,10 +3,7 @@ package com.example.morningroutine.ui.home
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -20,8 +17,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.morningroutine.core.ui.RoutineCard
 import com.example.morningroutine.model.Destination
-import com.example.morningroutine.model.Routine
-import com.example.morningroutine.model.destinationFrom
 
 @Composable
 fun HomeScreen(
@@ -59,7 +54,7 @@ fun HomeBody(
             ) {
                 items(uiState.routines) {
                     RoutineCard(
-                        destination = destinationFrom(it),
+                        destination = Destination.from(it),
                         onCardClick = onItemClick,
                     )
                 }

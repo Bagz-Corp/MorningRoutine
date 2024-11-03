@@ -17,7 +17,7 @@ interface StockRepository {
      */
     suspend fun getLatestValues(symbols: List<String>): List<StockInfo>
 
-    fun getHistoricalValues(symbol : String): Flow<List<Float>>
+    suspend fun getHistoricalValues(symbol : String): List<Float>
 }
 
 class StockRepositoryImpl @Inject constructor(
@@ -41,14 +41,14 @@ class StockRepositoryImpl @Inject constructor(
             throw e
         }
 
-    override fun getHistoricalValues(symbol: String): Flow<List<Float>> {
-        try {
+    override suspend fun getHistoricalValues(symbol: String): List<Float> {
+        return try {
             Log.i("StockRepositoryImpl", "Fetching historical values")
 //            val values = mrNetworkDataSource.getHistoricalValues(symbol = symbol).also {
 //                Log.i("StockRepositoryImpl", "Historical values retrieved: $it")
 //            }
             // delay(2000)
-            return flowOf(listOf(230.57f, 230.76f, 235.86f, 236.48f, 235.0f, 231.78f, 233.85f))
+            listOf(230.57f, 230.76f, 235.86f, 236.48f, 235.0f, 231.78f, 233.85f)
         } catch (e: Error) {
             throw e
         }

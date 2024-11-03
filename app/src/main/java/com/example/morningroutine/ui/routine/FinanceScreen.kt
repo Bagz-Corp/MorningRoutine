@@ -56,17 +56,17 @@ fun FinanceScreen(
     onStockClick: (StockInfo) -> Unit,
     viewModel: FinanceViewModel = hiltViewModel(),
 ) {
+    Log.i(TAG, "FinanceScreen")
+
     var isRefreshing by remember { mutableStateOf(false) }
     val uiState: FinanceUIState by viewModel.financeUiState.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
     val pullTeRefreshState = rememberPullToRefreshState()
 
-    Log.i(TAG, "FinanceScreen")
     Scaffold(
         modifier = modifier,
         floatingActionButton = { SmallFAB(onConfirmAdd = viewModel::addSymbol) },
     ) { padding ->
-        Log.i(TAG, "Enter the Scaffold")
         PullToRefreshBox(
             state = pullTeRefreshState,
             isRefreshing = isRefreshing,
@@ -102,21 +102,21 @@ private fun StockList(
     uiState: FinanceUIState,
     onStockClick: (StockInfo) -> Unit
 ) {
-    Log.i(TAG, "StockList")
     var loading by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf(false) }
 
     when (uiState) {
         FinanceUIState.Loading -> {
-            Log.i(TAG, "Loading")
+            Log.i(TAG, "Loading StockList")
             loading = true
         }
         is FinanceUIState.Error -> {
             loading = false
             error = true
-            Log.e(TAG, "Error: ${uiState.errorMessage}")
+            Log.e(TAG, "Error in StockList: ${uiState.errorMessage}")
         }
         is FinanceUIState.Success -> {
+            Log.i(TAG, "StockList loaded")
             loading = false
             error = false
 

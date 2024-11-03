@@ -35,6 +35,21 @@ fun StockDetails(
         it.create(stockInfo.symbol)
     }
 ) {
+    val uiState by viewModel.detailsUiState.collectAsStateWithLifecycle()
+
+    StockDetails(
+        modifier = modifier,
+        stockInfo = stockInfo,
+        uiState = uiState
+    )
+}
+
+@Composable
+fun StockDetails(
+    modifier: Modifier = Modifier,
+    stockInfo: StockInfo,
+    uiState: DetailsState
+) {
     Log.i(TAG, "Entered StockDetails screen")
 
     Column(
@@ -43,12 +58,11 @@ fun StockDetails(
             .background(GreenGray90)
             .padding(16.dp),
     ) {
-        val uiState by viewModel.detailsUiState.collectAsStateWithLifecycle()
 
         StockHeader(stockInfo = stockInfo)
         HorizontalDivider()
         StockBody(
-            modifier = Modifier,
+            modifier = modifier,
             isLoading = uiState.isLoading,
             chartsData = uiState.chartsData
         )
@@ -99,9 +113,14 @@ fun StockBody(
 @Composable
 private fun StockDetailsPreview() {
     StockDetails(
+        modifier = Modifier,
         stockInfo = StockInfo(
             name = "Stock Name",
             latestValue = "8975.23"
+        ),
+        uiState = DetailsState(
+            isLoading = false,
+            chartsData = listOf(1f, 2f, 3f, 4f, -2f)
         )
     )
 }

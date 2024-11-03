@@ -45,12 +45,14 @@ enum class Destination(
     FINANCE(type = 2),
     STOCK_DETAILS(type = 3),
     ROUTINE2(type = 4);
-}
 
-fun destinationFrom(type: Int): Destination = when (type) {
-    1 -> Destination.HOME
-    2 -> Destination.FINANCE
-    3 -> Destination.STOCK_DETAILS
-    4 -> Destination.ROUTINE2
-    else -> Destination.UNKNOWN
+    companion object {
+        fun from(type: Int): Destination = when (type) {
+            1 -> HOME
+            2 -> FINANCE
+            3 -> STOCK_DETAILS
+            4 -> ROUTINE2
+            else -> UNKNOWN
+        }
+    }
 }

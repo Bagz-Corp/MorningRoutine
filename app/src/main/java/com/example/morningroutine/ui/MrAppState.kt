@@ -37,11 +37,10 @@ class MrAppState(
             FinanceHome::class.java.name,
             StockRoute::class.java.name -> TopLevelDestinations.FINANCE
             else -> {
-                Log.i("MrAppState", "Unknown current destination: ${currentDestination?.route}")
+                Log.w("MrAppState", "Unknown current destination: ${currentDestination?.route}")
                 null
             }
         }
 
     fun navigateBack() = navController.popBackStack()
-
 }
