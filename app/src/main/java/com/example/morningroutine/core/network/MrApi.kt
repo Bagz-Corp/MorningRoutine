@@ -1,10 +1,11 @@
 package com.example.morningroutine.core.network
 
+import com.example.morningroutine.BuildConfig
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-private const val ACCESS_KEY = "baf52049b27c483cbca06d0ff540ac73"
+private const val ACCESS_KEY = BuildConfig.MARKETSTACK_API_KEY
 
 interface MrApi {
     @GET("/v1/intraday")

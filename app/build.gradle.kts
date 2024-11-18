@@ -1,3 +1,7 @@
+import org.jetbrains.kotlin.gradle.utils.loadPropertyFromResources
+import java.io.InputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -20,6 +24,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        with(Properties()) {
+            load(project.rootProject.file("local.properties").inputStream())
+
+            buildConfigField(
+                "String",
+                "MARKETSTACK_API_KEY",
+                getProperty("MARKETSTACK_API_KEY")
+            )
+        }
     }
 
     buildTypes {
@@ -39,7 +53,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        viewBinding = true
+        buildConfig = true
         compose = true
     }
     composeOptions {

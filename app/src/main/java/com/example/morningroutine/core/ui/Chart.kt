@@ -22,6 +22,7 @@ import com.example.morningroutine.core.theme.DarkGreenGray10
 import com.example.morningroutine.core.theme.Green80
 import com.example.morningroutine.core.theme.Red80
 import java.time.LocalDate
+import kotlin.random.Random
 
 /**
  *  Composable Component displaying a simple chart from the values given.
@@ -243,9 +244,11 @@ private fun getStepFrom(max: Float, min: Float): Int {
 @Preview
 @Composable
 private fun ChartPreview() {
+    val values = (1..30).map { Random.nextFloat() * 500 }
+
     Chart(
         modifier = Modifier.background(Color.White),
-        values = listOf(10f, 2f, 3f, 4f, -5f),
-        dateRange = DateRange.WEEK
+        values = values,
+        dateRange = DateRange.MONTH
     )
 }
